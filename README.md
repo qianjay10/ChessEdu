@@ -13,6 +13,8 @@ ChessEdu is an educational interactive web application designed to teach chess f
 - **Achievement System**: Track your progress and earn achievements
 - **User Progress Tracking**: Keep track of completed lessons and exercises
 
+## [▶️ Watch the demo video](https://drive.google.com/file/d/131RHLNPq-GF7GqjeAd1SPN8QeVNTJcfX/view?usp=sharing)
+
 
 ## Installation
 
