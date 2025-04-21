@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Piece Movement Exercise - ChessEdu</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/chessboard-1.0.0.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/exercises.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <header>
+            <nav class="main-nav">
+                <div class="logo">
+                    <h1>ChessEdu</h1>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/#lessons" class="active">Lessons</a></li>
+                    <li><a href="/#practice">Practice</a></li>
+                    <li><a href="/#achievements">Achievements</a></li>
+                </ul>
+                <div class="profile">
+                    <div class="streak">
+                        <span class="streak-icon">🔥</span>
+                        <span class="streak-count" id="streakCount">0</span>
+                    </div>
+                </div>
+            </nav>
+        </header>
+
+        <main>
+            <section class="exercise-page">
+                <div class="exercise-header">
+                    <h1>Piece Movement Exercise</h1>
+                    <p class="section-description">Learn how each chess piece moves on the board</p>
+                    <div class="progress-container">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                        </div>
+                        <div class="progress-text">
+                            <span id="currentStep">0</span>/<span id="totalSteps">6</span> pieces
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="exercise-container">
+                    <div class="exercise-sidebar">
+                        <div class="piece-selector">
+                            <h3>Select a Piece:</h3>
+                            <div class="piece-buttons">
+                                <button class="piece-btn" data-piece="pawn">
+                                    <span class="piece-icon">♙</span>
+                                    <span class="piece-name">Pawn</span>
+                                </button>
+                                <button class="piece-btn" data-piece="knight">
+                                    <span class="piece-icon">♘</span>
+                                    <span class="piece-name">Knight</span>
+                                </button>
+                                <button class="piece-btn" data-piece="bishop">
+                                    <span class="piece-icon">♗</span>
+                                    <span class="piece-name">Bishop</span>
+                                </button>
+                                <button class="piece-btn" data-piece="rook">
+                                    <span class="piece-icon">♖</span>
+                                    <span class="piece-name">Rook</span>
+                                </button>
+                                <button class="piece-btn" data-piece="queen">
+                                    <span class="piece-icon">♕</span>
+                                    <span class="piece-name">Queen</span>
+                                </button>
+                                <button class="piece-btn" data-piece="king">
+                                    <span class="piece-icon">♔</span>
+                                    <span class="piece-name">King</span>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="piece-info" id="pieceInfo">
+                            <h3>Piece Information</h3>
+                            <div class="piece-description">
+                                <p>Select a piece to see how it moves.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="exercise-controls">
+                            <button id="showAllMoves" class="btn secondary">Show All Moves</button>
+                            <button id="hideAllMoves" class="btn secondary">Hide Moves</button>
+                            <button id="nextPiece" class="btn primary" disabled>Next Piece →</button>
+                        </div>
+                    </div>
+                    
+                    <div class="exercise-main">
+                        <div id="exerciseBoard" style="width: 500px"></div>
+                        <div class="exercise-status">
+                            <div id="exerciseMessage" class="exercise-message">Select a piece to begin</div>
+                            <div class="exercise-task" id="exerciseTask"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <h3>ChessEdu</h3>
+                    <p>Learn chess fundamentals the fun way</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="/#lessons">Lessons</a></li>
+                        <li><a href="/#practice">Practice</a></li>
+                        <li><a href="/#achievements">Achievements</a></li>
+                    </ul>
+                </div>
+                <div class="footer-about">
+                    <h4>About</h4>
+                    <p>ChessEdu is a project designed to teach chess fundamentals to beginners through interactive lessons and guided practice.</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 ChessEdu. All rights reserved.</p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Scripts -->
+    <script src="{{ url_for('static', filename='js/vendor/jquery-3.6.0.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/vendor/chess.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/vendor/chessboard-1.0.0.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/vendor/animejs/lib/anime.min.js') }}"></script>
+    <script>
+        // Add debugging code to verify image paths
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Checking chess piece images...');
+            // Test loading all piece images
+            const pieces = ['wP', 'wR', 'wN', 'wB', 'wQ', 'wK', 'bP', 'bR', 'bN', 'bB', 'bQ', 'bK'];
+            pieces.forEach(piece => {
+                const img = new Image();
+                img.onload = function() {
+                    console.log(`✅ Successfully loaded image for ${piece}`);
+                };
+                img.onerror = function() {
+                    console.error(`❌ Failed to load image for ${piece}. Path: /static/images/chesspieces/wikipedia/${piece}.png`);
+                };
+                img.src = `/static/images/chesspieces/wikipedia/${piece}.png`;
+            });
+        });
+    </script>
+    <script src="{{ url_for('static', filename='js/exercises/piece-movement.js') }}"></script>
+</body>
+</html> 

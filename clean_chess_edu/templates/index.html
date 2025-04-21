@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChessEdu - Learn Chess Fundamentals</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="app-container">
+        <header>
+            <nav class="main-nav">
+                <div class="logo">
+                    <h1>ChessEdu</h1>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="#" class="active">Home</a></li>
+                    <li><a href="#lessons">Lessons</a></li>
+                    <li><a href="#practice">Practice</a></li>
+                    <li><a href="#achievements">Achievements</a></li>
+                </ul>
+                <div class="profile">
+                    <div class="streak">
+                        <span class="streak-icon">🔥</span>
+                        <span class="streak-count" id="streakCount">0</span>
+                    </div>
+                </div>
+            </nav>
+        </header>
+
+        <main>
+            <section class="hero">
+                <div class="hero-content">
+                    <h1>Learn Chess <span class="highlight">The Fun Way</span></h1>
+                    <p>Master the fundamentals of chess through interactive lessons and guided practice.</p>
+                    <div class="cta-buttons">
+                        <a href="#lessons" class="btn primary">Start Learning</a>
+                        <a href="#practice" class="btn secondary">Try the Board</a>
+                    </div>
+                </div>
+                <div class="hero-image">
+                    <div id="hero-animation"></div>
+                </div>
+            </section>
+
+            <section id="lessons" class="lessons-section">
+                <h2>Chess Lessons</h2>
+                <p class="section-description">Step-by-step guided lessons to help you learn chess fundamentals</p>
+                
+                <div class="lessons-container" id="lessonsContainer">
+                    <!-- Lessons will be loaded here dynamically -->
+                    <div class="loading">Loading lessons...</div>
+                </div>
+            </section>
+
+            <section id="practice" class="practice-section">
+                <h2>Practice Board</h2>
+                <p class="section-description">Interactive chessboard to practice what you've learned</p>
+                
+                <div class="board-container">
+                    <div id="chessboard"></div>
+                    <div class="board-controls">
+                        <button id="resetBoard" class="btn secondary">Reset Board</button>
+                        <button id="showHints" class="btn primary">Show Hints</button>
+                    </div>
+                </div>
+            </section>
+
+            <section id="achievements" class="achievements-section">
+                <h2>Your Achievements</h2>
+                <p class="section-description">Track your progress and collect achievements</p>
+                
+                <div class="achievements-container" id="achievementsContainer">
+                    <!-- Achievements will be loaded here dynamically -->
+                    <div class="no-achievements">Complete lessons to earn achievements!</div>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <h3>ChessEdu</h3>
+                    <p>Learn chess fundamentals the fun way</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#lessons">Lessons</a></li>
+                        <li><a href="#practice">Practice</a></li>
+                        <li><a href="#achievements">Achievements</a></li>
+                    </ul>
+                </div>
+                <div class="footer-about">
+                    <h4>About</h4>
+                    <p>ChessEdu is a project designed to teach chess fundamentals to beginners through interactive lessons and guided practice.</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 ChessEdu. All rights reserved.</p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="{{ url_for('static', filename='js/vendor/three.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/vendor/chess.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/vendor/chessboard-1.0.0.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/lessons.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/chessboard.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/achievements.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/animations.js') }}"></script>
+</body>
+</html> 

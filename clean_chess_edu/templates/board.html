@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Chess Board - ChessEdu</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/chessboard-1.0.0.min.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <header>
+            <nav class="main-nav">
+                <div class="logo">
+                    <h1>ChessEdu</h1>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/#lessons">Lessons</a></li>
+                    <li><a href="/#practice" class="active">Practice</a></li>
+                    <li><a href="/#achievements">Achievements</a></li>
+                </ul>
+                <div class="profile">
+                    <div class="streak">
+                        <span class="streak-icon">🔥</span>
+                        <span class="streak-count" id="streakCount">0</span>
+                    </div>
+                </div>
+            </nav>
+        </header>
+
+        <main>
+            <section class="board-page">
+                <h1>Interactive Chess Board</h1>
+                <p class="section-description">Practice your moves and explore different positions</p>
+                
+                <div class="interactive-board-container">
+                    <div class="board-sidebar">
+                        <div class="board-controls">
+                            <h3>Controls</h3>
+                            <button id="startPosition" class="btn secondary">Start Position</button>
+                            <button id="clearBoard" class="btn secondary">Clear Board</button>
+                            <button id="flipBoard" class="btn secondary">Flip Board</button>
+                            
+                            <h3>Move History</h3>
+                            <div id="moveHistory" class="move-history">
+                                <!-- Move history will appear here -->
+                                <p class="empty-message">No moves yet</p>
+                            </div>
+                            
+                            <h3>Piece Selection</h3>
+                            <div class="piece-selection">
+                                <div class="piece-btn" data-piece="wP">♙</div>
+                                <div class="piece-btn" data-piece="wR">♖</div>
+                                <div class="piece-btn" data-piece="wN">♘</div>
+                                <div class="piece-btn" data-piece="wB">♗</div>
+                                <div class="piece-btn" data-piece="wQ">♕</div>
+                                <div class="piece-btn" data-piece="wK">♔</div>
+                                <div class="piece-btn" data-piece="bP">♟</div>
+                                <div class="piece-btn" data-piece="bR">♜</div>
+                                <div class="piece-btn" data-piece="bN">♞</div>
+                                <div class="piece-btn" data-piece="bB">♝</div>
+                                <div class="piece-btn" data-piece="bQ">♛</div>
+                                <div class="piece-btn" data-piece="bK">♚</div>
+                            </div>
+                        </div>
+
+                        <div class="board-help">
+                            <h3>Learning Tips</h3>
+                            <div id="boardHelp" class="help-content">
+                                <p><strong>Piece Movement:</strong></p>
+                                <ul>
+                                    <li>Pawns move forward 1 square (2 on first move)</li>
+                                    <li>Knights move in an L-shape (2+1)</li>
+                                    <li>Bishops move diagonally</li>
+                                    <li>Rooks move horizontally and vertically</li>
+                                    <li>Queens move in any direction</li>
+                                    <li>Kings move one square in any direction</li>
+                                </ul>
+                                
+                                <p><strong>Opening Tips:</strong></p>
+                                <ul>
+                                    <li>Control the center (e4, d4, e5, d5)</li>
+                                    <li>Develop knights and bishops early</li>
+                                    <li>Castle to protect your king</li>
+                                    <li>Connect your rooks</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="board-main">
+                        <div id="board" style="width: 500px"></div>
+                        <div class="position-info">
+                            <div id="position" class="position-notation"></div>
+                            <div id="turn-indicator">White to move</div>
+                        </div>
+                        <div class="hint-container">
+                            <div id="hint" class="hint-text"></div>
+                            <button id="showHint" class="btn primary">Show Hint</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <h3>ChessEdu</h3>
+                    <p>Learn chess fundamentals the fun way</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="/#lessons">Lessons</a></li>
+                        <li><a href="/#practice">Practice</a></li>
+                        <li><a href="/#achievements">Achievements</a></li>
+                    </ul>
+                </div>
+                <div class="footer-about">
+                    <h4>About</h4>
+                    <p>ChessEdu is a project designed to teach chess fundamentals to beginners through interactive lessons and guided practice.</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 ChessEdu. All rights reserved.</p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="{{ url_for('static', filename='js/vendor/jquery-3.6.0.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/vendor/chess.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/vendor/chessboard-1.0.0.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/animations.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/board.js') }}"></script>
+</body>
+</html> 
