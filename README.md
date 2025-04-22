@@ -2,7 +2,11 @@
 
 ChessEdu is an educational interactive web application designed to teach chess fundamentals to beginners. The application features step-by-step lessons, interactive exercises, and a practice chessboard to help users learn chess at their own pace.
 
-* ***Note: Everything is in clean_chess_edu folder. Run all setup commands inside it.***
+***Important Notes:***
+
+- ***1. It was mentioned in the introduction document that this app will be in the form of a mobile app. This development strategy of this app has been changed to a website due to the timeline and cost to actually put it up in the AppStore as an app.***
+
+- ***2. Everything is in clean_chess_edu folder. Run all setup commands inside it.***
 
 ## Features
 
