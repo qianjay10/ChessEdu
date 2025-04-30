@@ -35,11 +35,23 @@ LESSONS = [
     }
 ]
 
-# User progress tracking
+# Enhanced user progress tracking structure
 USER_PROGRESS = {
-    "completed_lessons": [],
+    # Change from simple array to object structure to match frontend expectations
+    "completedLessons": [],  # Will contain objects with lessonId, completed status
+    "completed_lessons": [], # Keep the old format for backward compatibility
     "achievements": [],
     "current_streak": 0
+}
+
+# Map of exercise IDs to their parent lesson IDs
+EXERCISE_TO_LESSON = {
+    "piece_movement": 1,
+    "board_setup": 1,
+    "center_control": 2,
+    "piece_development": 2,
+    "fork_practice": 3,
+    "pin_practice": 3
 }
 
 @app.route('/')
@@ -71,18 +83,99 @@ def complete_lesson():
     data = request.json
     lesson_id = data.get('lesson_id')
     
+    # Update both progress formats for backward compatibility
     if lesson_id not in USER_PROGRESS["completed_lessons"]:
         USER_PROGRESS["completed_lessons"].append(lesson_id)
-        USER_PROGRESS["current_streak"] += 1
         
-        # Award achievement for first lesson
-        if len(USER_PROGRESS["completed_lessons"]) == 1:
-            USER_PROGRESS["achievements"].append({
-                "id": "first_lesson",
-                "title": "First Step",
-                "description": "Completed your first chess lesson!"
-            })
+    # Add to the new format if not already present
+    lesson_completion = next((completion for completion in USER_PROGRESS["completedLessons"] 
+                              if completion.get("lessonId") == lesson_id), None)
+    
+    if not lesson_completion:
+        USER_PROGRESS["completedLessons"].append({
+            "lessonId": lesson_id,
+            "completed": True,
+            "timestamp": data.get('timestamp', "")
+        })
+    else:
+        lesson_completion["completed"] = True
+    
+    USER_PROGRESS["current_streak"] += 1
+    
+    # Award achievement for first lesson
+    if len(USER_PROGRESS["completed_lessons"]) == 1:
+        USER_PROGRESS["achievements"].append({
+            "id": "first_lesson",
+            "title": "First Step",
+            "description": "Completed your first chess lesson!"
+        })
             
+    return jsonify(USER_PROGRESS)
+
+@app.route('/api/complete-exercise', methods=['POST'])
+def complete_exercise():
+    """Mark an exercise as completed and update associated lesson progress"""
+    data = request.json
+    exercise_id = data.get('exerciseId')
+    
+    if not exercise_id:
+        return jsonify({"error": "Exercise ID is required"}), 400
+    
+    # Find which lesson this exercise belongs to
+    lesson_id = EXERCISE_TO_LESSON.get(exercise_id)
+    if not lesson_id:
+        return jsonify({"error": f"Exercise '{exercise_id}' not found"}), 404
+    
+    # Find the lesson in our progress
+    lesson_completion = next((completion for completion in USER_PROGRESS["completedLessons"] 
+                              if completion.get("lessonId") == lesson_id), None)
+    
+    # If lesson doesn't exist in our progress, create it
+    if not lesson_completion:
+        lesson_completion = {
+            "lessonId": lesson_id,
+            "completed": False,
+            "exercises": [],
+            "timestamp": ""
+        }
+        USER_PROGRESS["completedLessons"].append(lesson_completion)
+    
+    # If exercises array doesn't exist, create it
+    if "exercises" not in lesson_completion:
+        lesson_completion["exercises"] = []
+    
+    # Check if exercise is already completed
+    exercise_completion = next((ex for ex in lesson_completion["exercises"] 
+                               if ex.get("id") == exercise_id), None)
+    
+    if not exercise_completion:
+        lesson_completion["exercises"].append({
+            "id": exercise_id,
+            "completed": True,
+            "timestamp": ""
+        })
+    else:
+        exercise_completion["completed"] = True
+    
+    # Check if all exercises for this lesson are completed
+    lesson = next((l for l in LESSONS if l["id"] == lesson_id), None)
+    if lesson:
+        all_exercises = lesson.get("interactive_exercises", [])
+        completed_exercises = [ex.get("id") for ex in lesson_completion["exercises"] 
+                              if ex.get("completed")]
+        
+        all_completed = all(ex in completed_exercises for ex in all_exercises)
+        
+        # If all exercises are completed, mark lesson as completed
+        if all_completed:
+            lesson_completion["completed"] = True
+            
+            # Also update the simple array format
+            if lesson_id not in USER_PROGRESS["completed_lessons"]:
+                USER_PROGRESS["completed_lessons"].append(lesson_id)
+                USER_PROGRESS["current_streak"] += 1
+    
+    # Return the updated progress
     return jsonify(USER_PROGRESS)
 
 @app.route('/board')
@@ -94,6 +187,16 @@ def chess_board():
 def exercise(exercise_name):
     """Render specific interactive exercises"""
     return render_template(f'exercises/{exercise_name}.html')
+
+@app.route('/save-progress', methods=['POST'])
+def save_progress():
+    """Save user progress data from the client"""
+    data = request.json
+    if data:
+        # Update our progress with the client data
+        USER_PROGRESS.update(data)
+        return jsonify({"success": True})
+    return jsonify({"error": "No data provided"}), 400
 
 if __name__ == '__main__':
     app.run(debug=True, port=5001) 
