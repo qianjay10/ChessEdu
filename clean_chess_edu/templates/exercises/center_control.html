@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Center Control Exercise - ChessEdu</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/chessboard-1.0.0.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/exercises.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <header>
+            <nav class="main-nav">
+                <div class="logo">
+                    <h1>ChessEdu</h1>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/#lessons" class="active">Lessons</a></li>
+                    <li><a href="/#practice">Practice</a></li>
+                    <li><a href="/#achievements">Achievements</a></li>
+                </ul>
+                <div class="profile">
+                    <div class="streak">
+                        <span class="streak-icon">🔥</span>
+                        <span class="streak-count" id="streakCount">0</span>
+                    </div>
+                </div>
+            </nav>
+        </header>
+
+        <main>
+            <section class="exercise-page">
+                <div class="exercise-header">
+                    <h1>Center Control Exercise</h1>
+                    <p class="section-description">Learn how to control the center of the board with your pawns and pieces</p>
+                    <div class="progress-container">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                        </div>
+                        <div class="progress-text">
+                            <span id="currentStep">0</span>/<span id="totalSteps">4</span> steps
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="exercise-container">
+                    <div class="exercise-sidebar">
+                        <div class="step-selector">
+                            <h3>Exercise Steps:</h3>
+                            <div class="step-buttons">
+                                <button class="step-btn active" data-step="1">1. Center Squares</button>
+                                <button class="step-btn" data-step="2">2. Center Pawns</button>
+                                <button class="step-btn" data-step="3">3. Develop Pieces</button>
+                                <button class="step-btn" data-step="4">4. Control Center</button>
+                            </div>
+                        </div>
+                        
+                        <div class="step-info" id="stepInfo">
+                            <h3>Step Information</h3>
+                            <div class="step-description">
+                                <p>Select a step to learn about controlling the center.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="exercise-controls">
+                            <button id="resetBoard" class="btn secondary">Reset Board</button>
+                            <button id="verifyPosition" class="btn primary">Verify Position</button>
+                            <button id="nextStep" class="btn primary" disabled>Next Step →</button>
+                        </div>
+                    </div>
+                    
+                    <div class="exercise-main">
+                        <div id="centerBoard" style="width: 500px"></div>
+                        <div class="exercise-status">
+                            <div id="exerciseMessage" class="exercise-message">Select step 1 to begin</div>
+                            <div class="exercise-task" id="exerciseTask"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <h3>ChessEdu</h3>
+                    <p>Learn chess fundamentals the fun way</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="/#lessons">Lessons</a></li>
+                        <li><a href="/#practice">Practice</a></li>
+                        <li><a href="/#achievements">Achievements</a></li>
+                    </ul>
+                </div>
+                <div class="footer-about">
+                    <h4>About</h4>
+                    <p>ChessEdu is a project designed to teach chess fundamentals to beginners through interactive lessons and guided practice.</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 ChessEdu. All rights reserved.</p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Scripts -->
+    <script src="{{ url_for('static', filename='js/vendor/jquery-3.6.0.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/vendor/chess.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/vendor/chessboard-1.0.0.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/vendor/animejs/lib/anime.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/exercises/center-control.js') }}"></script>
+</body>
+</html> 

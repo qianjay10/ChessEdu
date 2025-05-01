@@ -184,6 +184,17 @@
     box-sizing: border-box;
 }
 
+/* Center Control Exercise highlighting */
+.center-square {
+    background-color: rgba(255, 193, 7, 0.5) !important;
+    border: 2px solid rgba(255, 152, 0, 0.8) !important;
+}
+
+.controlled-square {
+    background-color: rgba(76, 175, 80, 0.3) !important;
+    border: 2px solid rgba(76, 175, 80, 0.8) !important;
+}
+
 /* Interactive pieces on the board */
 .draggable-piece {
     cursor: grab;

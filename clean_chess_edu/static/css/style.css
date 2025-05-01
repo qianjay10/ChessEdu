@@ -331,6 +331,45 @@ header {
     margin-top: 1.5rem;
 }
 
+/* Practice exercises section */
+.practice-exercises {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background-color: #f8f9fa;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+}
+
+.practice-exercises h3 {
+    margin-bottom: 1rem;
+    color: var(--primary-color);
+}
+
+.exercise-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.exercise-description {
+    padding: 1rem;
+    background-color: white;
+    border-radius: var(--border-radius);
+    border-left: 4px solid var(--accent-color);
+    font-style: italic;
+    color: var(--secondary-color);
+}
+
+.btn.accent {
+    background-color: var(--accent-color);
+    color: white;
+}
+
+.btn.accent:hover {
+    background-color: #786fa6;
+}
+
 /* Achievements */
 .achievements-container {
     display: grid;

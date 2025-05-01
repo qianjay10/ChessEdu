@@ -9,62 +9,90 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-// All possible achievements
-const achievementsList = [
+// Map lessons to achievements - each lesson completion unlocks a specific achievement
+const lessonAchievements = [
+    {
+        lessonId: 1,
+        id: 'chess_pieces',
+        title: 'Chess Pieces Master',
+        description: 'Completed the lesson on Chess Pieces & Board Setup',
+        icon: '♟️'
+    },
+    {
+        lessonId: 2,
+        id: 'opening_principles',
+        title: 'Opening Expert',
+        description: 'Mastered the Basic Opening Principles',
+        icon: '♘'
+    },
+    {
+        lessonId: 3,
+        id: 'tactics_master',
+        title: 'Tactics Master',
+        description: 'Learned about Forks & Pins tactics',
+        icon: '♖'
+    }
+];
+
+// Individual objective achievements for specific lessons
+const objectiveAchievements = [
+    // Basic Opening Principles objectives
+    {
+        lessonId: 2,
+        objectiveIndex: 0,
+        id: 'center_control',
+        title: 'Center Commander',
+        description: 'Learned how to control the center of the board',
+        icon: '♙'
+    },
+    {
+        lessonId: 2,
+        objectiveIndex: 1,
+        id: 'piece_development',
+        title: 'Development Director',
+        description: 'Mastered the skill of developing your pieces efficiently',
+        icon: '♗'
+    },
+    {
+        lessonId: 2,
+        objectiveIndex: 2,
+        id: 'king_safety',
+        title: 'Castle Keeper',
+        description: 'Learned the importance of castling for king safety',
+        icon: '♚'
+    }
+];
+
+// Additional achievements that aren't directly tied to lessons
+const additionalAchievements = [
     {
         id: 'first_lesson',
         title: 'First Step',
         description: 'Completed your first chess lesson!',
-        icon: '🏆'
+        icon: '🏆',
+        requirement: (progress) => progress.completed_lessons.length >= 1
     },
     {
-        id: 'piece_movement_mastery',
-        title: 'Piece Movement Master',
-        description: 'You learned how all the chess pieces move!',
-        icon: '♘'
-    },
-    {
-        id: 'board_setup',
-        title: 'Ready to Play',
-        description: 'You can now set up a chess board correctly!',
-        icon: '♜'
-    },
-    {
-        id: 'center_control',
-        title: 'Center Commander',
-        description: 'You understand the importance of controlling the center!',
-        icon: '♙'
+        id: 'all_lessons',
+        title: 'Chess Fundamentals Graduate',
+        description: 'Completed all basic chess lessons!',
+        icon: '🎓',
+        requirement: (progress) => progress.completed_lessons.length >= 3
     },
     {
         id: 'three_day_streak',
         title: 'Consistent Learner',
         description: 'You\'ve maintained a 3-day learning streak!',
-        icon: '🔥'
-    },
-    {
-        id: 'opening_principles',
-        title: 'Opening Expert',
-        description: 'You\'ve mastered the basic opening principles!',
-        icon: '♖'
-    },
-    {
-        id: 'first_fork',
-        title: 'Fork Master',
-        description: 'You successfully executed your first fork!',
-        icon: '🍴'
-    },
-    {
-        id: 'first_pin',
-        title: 'Pin Point',
-        description: 'You successfully executed your first pin!',
-        icon: '📌'
-    },
-    {
-        id: 'all_lessons',
-        title: 'Chess Fundamentals Graduate',
-        description: 'You\'ve completed all the fundamental chess lessons!',
-        icon: '🎓'
+        icon: '🔥',
+        requirement: (progress) => progress.current_streak >= 3
     }
+];
+
+// Combine all lists for a complete achievements list
+const achievementsList = [
+    ...lessonAchievements, 
+    ...objectiveAchievements, 
+    ...additionalAchievements
 ];
 
 // Load achievements from the server
@@ -78,7 +106,9 @@ function loadAchievements() {
     fetch('/progress')
         .then(response => response.json())
         .then(progress => {
-            displayAchievements(progress.achievements);
+            // Generate achievements based on completed lessons
+            const unlockedAchievements = generateAchievementsFromProgress(progress);
+            displayAchievements(unlockedAchievements, progress);
         })
         .catch(error => {
             console.error('Error fetching achievements:', error);
@@ -86,15 +116,64 @@ function loadAchievements() {
         });
 }
 
+// Generate achievements based on user progress
+function generateAchievementsFromProgress(progress) {
+    const unlockedAchievements = [];
+    
+    // Check completed lessons and add relevant achievements
+    if (progress.completed_lessons && progress.completed_lessons.length > 0) {
+        // Add lesson-specific achievements
+        lessonAchievements.forEach(achievement => {
+            if (progress.completed_lessons.includes(achievement.lessonId)) {
+                unlockedAchievements.push({
+                    id: achievement.id,
+                    title: achievement.title,
+                    description: achievement.description,
+                    icon: achievement.icon
+                });
+            }
+        });
+        
+        // Check for completed objectives
+        if (progress.completedObjectives) {
+            objectiveAchievements.forEach(achievement => {
+                const key = `${achievement.lessonId}_${achievement.objectiveIndex}`;
+                if (progress.completedObjectives.includes(key)) {
+                    unlockedAchievements.push({
+                        id: achievement.id,
+                        title: achievement.title,
+                        description: achievement.description,
+                        icon: achievement.icon
+                    });
+                }
+            });
+        }
+        
+        // Check for additional achievements
+        additionalAchievements.forEach(achievement => {
+            if (achievement.requirement && achievement.requirement(progress)) {
+                unlockedAchievements.push({
+                    id: achievement.id,
+                    title: achievement.title,
+                    description: achievement.description,
+                    icon: achievement.icon
+                });
+            }
+        });
+    }
+    
+    return unlockedAchievements;
+}
+
 // Display achievements in the UI
-function displayAchievements(userAchievements) {
+function displayAchievements(unlockedAchievements, progress) {
     const achievementsContainer = document.getElementById('achievementsContainer');
     
     // Clear loading state
     achievementsContainer.innerHTML = '';
     
     // Check if there are any achievements
-    if (!userAchievements || userAchievements.length === 0) {
+    if (!unlockedAchievements || unlockedAchievements.length === 0) {
         achievementsContainer.innerHTML = '<div class="no-achievements">Complete lessons to earn achievements!</div>';
         
         // Add a few locked achievements as previews
@@ -107,18 +186,17 @@ function displayAchievements(userAchievements) {
         return;
     }
     
-    // Get user achievements
-    const earnedAchievements = userAchievements.map(a => a.id);
+    // Get IDs of unlocked achievements
+    const unlockedAchievementIds = unlockedAchievements.map(a => a.id);
     
     // Sort: earned achievements first, then locked ones
-    const sortedAchievements = [
-        ...achievementsList.filter(a => earnedAchievements.includes(a.id)),
-        ...achievementsList.filter(a => !earnedAchievements.includes(a.id))
-    ];
+    const unlockedItems = achievementsList.filter(a => unlockedAchievementIds.includes(a.id));
+    const lockedItems = achievementsList.filter(a => !unlockedAchievementIds.includes(a.id));
+    const sortedAchievements = [...unlockedItems, ...lockedItems];
     
     // Generate HTML for each achievement
     sortedAchievements.forEach(achievement => {
-        const isLocked = !earnedAchievements.includes(achievement.id);
+        const isLocked = !unlockedAchievementIds.includes(achievement.id);
         const achievementCard = createAchievementCard(achievement, isLocked);
         achievementsContainer.appendChild(achievementCard);
         
@@ -216,7 +294,9 @@ function addAchievement(achievement) {
                     // Update achievements display if on the achievements page
                     const achievementsContainer = document.getElementById('achievementsContainer');
                     if (achievementsContainer) {
-                        displayAchievements(updatedProgress.achievements);
+                        // Generate new achievements based on progress
+                        const unlockedAchievements = generateAchievementsFromProgress(updatedProgress);
+                        displayAchievements(unlockedAchievements, updatedProgress);
                     }
                 })
                 .catch(error => {
@@ -246,7 +326,7 @@ function showAchievementCelebration(achievement) {
     // Add to the DOM
     document.body.appendChild(modal);
     
-    // Create confetti
+    // Create confetti if the function exists
     if (typeof createConfetti === 'function') {
         createConfetti();
     }
@@ -280,26 +360,6 @@ function showAchievementCelebration(achievement) {
             modal.remove();
         }
     });
-    
-    // Auto-close after 6 seconds
-    setTimeout(() => {
-        if (document.body.contains(modal)) {
-            if (typeof anime === 'function') {
-                anime({
-                    targets: modal,
-                    scale: [1, 0.9],
-                    opacity: [1, 0],
-                    duration: 300,
-                    easing: 'easeInOutQuad',
-                    complete: function() {
-                        modal.remove();
-                    }
-                });
-            } else {
-                modal.remove();
-            }
-        }
-    }, 6000);
 }
 
 // Export functions for use in other modules

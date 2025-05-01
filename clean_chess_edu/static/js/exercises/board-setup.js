@@ -416,6 +416,31 @@ function showCompletionAnimation() {
     if (verifySetupBtn) verifySetupBtn.disabled = true;
     if (nextStepBtn) nextStepBtn.disabled = true;
     
+    // Call the API to record exercise completion
+    fetch('/api/complete-exercise', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            exerciseId: 'board_setup',
+            completed: true
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Exercise completion recorded:', data);
+        
+        // Update local progress if possible
+        if (window.userProgress) {
+            window.userProgress = data;
+            localStorage.setItem('chessEduProgress', JSON.stringify(data));
+        }
+    })
+    .catch(error => {
+        console.error('Error recording exercise completion:', error);
+    });
+    
     // Add achievement (if we have achievement functionality)
     if (typeof addAchievement === 'function') {
         addAchievement({
@@ -449,7 +474,7 @@ function showCompletionAnimation() {
             setupTask.innerHTML = `
                 <div class="next-lesson">
                     <p>Ready to continue your chess journey?</p>
-                    <a href="/exercises/basic_tactics" class="btn primary">Next Lesson: Basic Tactics →</a>
+                    <a href="/exercises/center_control" class="btn primary">Next Lesson: Basic Opening Principles →</a>
                 </div>
             `;
         }

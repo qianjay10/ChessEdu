@@ -385,20 +385,57 @@ function showCompletionAnimation() {
 
 // Show final completion message
 function showFinalCompletion() {
-    // Create a completion message element
-    const completionMessage = document.createElement('div');
-    completionMessage.className = 'completion-message';
-    completionMessage.innerHTML = `
-        <h3>Congratulations!</h3>
-        <p>You've learned how all the chess pieces move. Now you're ready to play chess!</p>
-        <button class="btn primary" id="continueButton">Continue to Next Lesson</button>
-    `;
-    
-    // Add to the page
+    // Hide the board and show completion message
     const exerciseContainer = document.querySelector('.exercise-container');
     if (exerciseContainer) {
+        // Create completion message
+        const completionMessage = document.createElement('div');
+        completionMessage.className = 'completion-message';
+        completionMessage.innerHTML = `
+            <h2>🎉 Exercise Complete! 🎉</h2>
+            <p>Congratulations! You've learned how all the chess pieces move.</p>
+            <p>You now understand:</p>
+            <ul>
+                <li>How pawns move forward and capture diagonally</li>
+                <li>How knights make their L-shaped jumps</li>
+                <li>How bishops move diagonally</li>
+                <li>How rooks move horizontally and vertically</li>
+                <li>How the queen combines bishop and rook movements</li>
+                <li>How the king moves one square in any direction</li>
+            </ul>
+            <p>You're ready to learn how to set up the chess board!</p>
+            <button id="continueButton" class="btn primary">Continue to Board Setup →</button>
+        `;
+        
+        // Replace exercise content with completion message
+        exerciseContainer.innerHTML = '';
         exerciseContainer.appendChild(completionMessage);
     }
+    
+    // Call the API to record exercise completion
+    fetch('/api/complete-exercise', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            exerciseId: 'piece_movement',
+            completed: true
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Exercise completion recorded:', data);
+        
+        // Update local progress if possible
+        if (window.userProgress) {
+            window.userProgress = data;
+            localStorage.setItem('chessEduProgress', JSON.stringify(data));
+        }
+    })
+    .catch(error => {
+        console.error('Error recording exercise completion:', error);
+    });
     
     // Add event listener for continue button
     const continueButton = document.getElementById('continueButton');

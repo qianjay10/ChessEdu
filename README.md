@@ -14,10 +14,10 @@ ChessEdu is an educational interactive web application designed to teach chess f
 - **Piece Movement Exercise**: Learn how each chess piece moves on the board
 - **Board Setup**: Learn how to correctly set up a chess board
 - **Practice Board**: Interactive chessboard to practice what you've learned
-- **Achievement System**: Track your progress and earn achievements **(feature will be fully implemented in the next prototype)**
-- **User Progress Tracking**: Keep track of completed lessons and exercises **(feature will be fully implemented in the next prototype)**
+- **Achievement System**: Track your progress and earn achievements
+- **User Progress Tracking**: Keep track of completed lessons and exercises
 
-## [▶️ Watch the demo video](https://drive.google.com/file/d/131RHLNPq-GF7GqjeAd1SPN8QeVNTJcfX/view?usp=sharing)
+## [▶️ Watch the demo video](https://drive.google.com/file/d/1tjnfJCwfS-T7Tn-sCvOENa9TfflNVdVo/view?usp=sharing)
 
 
 ## Installation
@@ -73,16 +73,16 @@ python src/app.py
 
 ## Learning Path
 
-1. **Chess Pieces & Board Setup (Current Prototype 1 Features)**
+1. **Chess Pieces & Board Setup**
    - Learn about each chess piece and how it moves
    - Learn about proper chess board orientation
    - Learn how to set up a chess board correctly
 
-2. **Basic Opening Principles (Future Prototype 2 Features)**
+2. **Basic Opening Principles**
    - Learn fundamental principles to start your chess games effectively
    - Control the center, develop your pieces, and castle for king safety
 
-3. **Simple Tactics: Forks & Pins (Future Prototype 2 Features)**
+3. **Simple Tactics: Forks & Pins**
    - Learn about forks, pins, and how they can give you an advantage
    - Practice identifying and executing these tactics
 

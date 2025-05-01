@@ -11,8 +11,30 @@ let streakCount = 0;
 let userProgress = {
     completedLessons: [],
     achievements: [],
-    currentStreak: 0
+    current_streak: 0
 };
+
+// Try to load progress from localStorage
+try {
+    const savedProgress = localStorage.getItem('chessEduProgress');
+    if (savedProgress) {
+        userProgress = JSON.parse(savedProgress);
+    } else {
+        // Fetch progress from server if available
+        fetch('/progress')
+            .then(response => response.json())
+            .then(data => {
+                userProgress = data;
+                // Also save to localStorage
+                localStorage.setItem('chessEduProgress', JSON.stringify(userProgress));
+            })
+            .catch(error => {
+                console.error('Error fetching progress:', error);
+            });
+    }
+} catch (e) {
+    console.error('Error loading progress:', e);
+}
 
 // Initialize application
 function initApp() {
@@ -44,7 +66,7 @@ function updateUI() {
     // Update streak count
     const streakElement = document.getElementById('streakCount');
     if (streakElement) {
-        streakElement.textContent = userProgress.currentStreak;
+        streakElement.textContent = userProgress.current_streak;
     }
     
     // Update other UI elements as needed
